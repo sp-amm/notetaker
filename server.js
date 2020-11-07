@@ -1,7 +1,7 @@
 //NPM Dependencies
 const fs = require("fs");
 const path = require("path");
-//const notes = require("db.json");
+const notes = require("./db.json");
 const express = require("express");
 const app = express();
 
@@ -21,20 +21,18 @@ app.use(express.json());
 app.get("/api/notes", function(req, res){
     fs.readFile("db.json", (err, notes) => { 
         if (err) throw err;
-        //let databaseContent = JSON.parse(data)
-        //return (databaseContent);
         notes = JSON.parse(notes);
-        console.log(notes);
-        
-        //console.log(res.json(notes));
+        //console.log(notes);
         res.json(notes);
     });
 });
 
 //API Post request to handle the user submitted data.
 app.post("/api/notes", function(req, res){
+    //console.log(req.body);
     notes.push(req.body);
-    JSON.parse(notes)
+    console.log(notes);
+    //JSON.parse(notes)
     res.json(true);
 })
 
