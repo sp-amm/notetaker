@@ -1,6 +1,6 @@
 
 let fs = require("fs");
-let notes = require("db.json");
+//let notes = require("db.json");
 
 
 
