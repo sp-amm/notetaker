@@ -21,7 +21,7 @@ app.use(express.json());
 //API get request to display data when user visits the page. 
 app.get("/api/notes", function(req, res){
     fs.readFile("db.json", (err, notes) => { 
-        if (err) throw err;
+        if (err) console.error("Something went wrong.");
         notes = JSON.parse(notes);
         //console.log(notes);
         res.json(notes);
@@ -42,13 +42,11 @@ app.post("/api/notes", function(req, res){
     notes.push(newNote);
     
     fs.writeFile("db.json", JSON.stringify(notes), (err) => {
-        if (err) throw err;
+        if (err) console.error("Something went wrong.");
         res.json(notes);
     });
         
-    //console.log(notes);
-    //JSON.parse(notes)
-})
+});
 
 //API delete request to delete when requested.
 //* DELETE `/api/notes/:id` - Should receive a query parameter containing the id of a note
@@ -56,9 +54,14 @@ app.post("/api/notes", function(req, res){
 //it's saved. In order to delete a note, you'll need to read all notes from the `db.json` 
 //file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
 app.delete("api/notes/:id", function(req, res){
-    console.log(notes)
-    delete notes[id];
-    res.json(notes);
+    id = req.body.id;
+    notes.splice(id, 1);
+    console.log(notes); 
+    fs.writeFile("db.json", JSON.stringify(notes), (err) => {
+        if (err) throw err;
+        res.json(notes);
+    }); 
+    //res.json(notes);
 });
 
 
