@@ -1,4 +1,5 @@
 
+let fs = require("fs");
 let notes = require("./db/db.json");
 
 
@@ -7,18 +8,23 @@ module.exports = function(app){
     
    //API get request to display data when user visits the page. 
     app.get("/api/notes", function(req, res){
-        res.json(notes);
+        fs.readFile('/db/db.json', (err, data) => { 
+            if (err) throw err;
+            let databaseContent = JSON.parse(data)
+            return (databaseContent);
+        })
+        res.json(databaseContent);
     })
 
     //API Post request to handle the user submitted data.
     app.post("/api/notes", function(req, res){
-        notes.push(req.body);
+        note.push(req.body);
         res.json(true);
     })
 
     //API delete request to delete when requested.
     app.delete("api/notes/:id", function(req, res){
-        
+
     })
 }
 
