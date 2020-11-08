@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const notes = require("./db.json");
 const express = require("express");
-const { networkInterfaces } = require("os");
+//const { networkInterfaces } = require("os");
 const app = express();
 
 
@@ -55,22 +55,10 @@ app.post("/api/notes", function(req, res){
 //file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
 app.delete("/api/notes/:id", async function(req, res){
      
-        
     let data = await fs.readFileSync('db.json');
-    //console.log(data);
     let list = await JSON.parse(data);
     console.log(list);
     console.log(req.params.id);
-    //console.log(list[1].id);
-     
-    
-/*      function filterByID(list){
-        if(list.id !== req.params.id){
-        return true
-        } 
-    }; */
-
-    let newJson = []; 
     
     function filterByID(list){
         if (list.id !== parseInt(req.params.id)){
@@ -78,21 +66,16 @@ app.delete("/api/notes/:id", async function(req, res){
             };
         };
 
-    newJson = await list.filter(filterByID);
-    console.log(newJson); 
- /*    deleteNoteId = req.params.id;
-    console.log(deleteNoteId)
-    let data = fs.readFileSync('db.json');
-    let list = JSON.parse(data);
-    let noteToDelete = list.deleteId;
-    notes = list.filter((deleteNoteId) => {return list.id !== noteToDelete}) */
-    //console.log(id);
-   //delete notes[id];
-  //  console.log(notes); 
-    await fs.writeFile("db.json", JSON.stringify(newJson), (err) => {
-        if (err) console.error("Something went wrong.");
-        res.json(notes);
-    }); 
+    //let newJson = await list.filter(filterByID);
+    //console.log(newJson); 
+
+
+    await fs.writeFile("db.json", JSON.stringify(list.filter(filterByID)), (err) => {
+        if (err) console.error("Something went wrong.");  
+        res.json(list);
+   
+    });   
+    
 });
 
 
