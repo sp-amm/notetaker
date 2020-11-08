@@ -53,14 +53,15 @@ app.post("/api/notes", function(req, res){
 // to delete. This means you'll need to find a way to give each note a unique `id` when 
 //it's saved. In order to delete a note, you'll need to read all notes from the `db.json` 
 //file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
-app.delete("/api/notes/:id", function(req, res){
+app.delete("/api/notes/:id", async function(req, res){
      
-    let data = fs.readFileSync('db.json');
+        
+    let data = await fs.readFileSync('db.json');
     //console.log(data);
-    let list = JSON.parse(data);
+    let list = await JSON.parse(data);
     console.log(list);
     console.log(req.params.id);
-    console.log(list[1].id);
+    //console.log(list[1].id);
      
     
 /*      function filterByID(list){
@@ -71,11 +72,13 @@ app.delete("/api/notes/:id", function(req, res){
 
     let newJson = []; 
     
-    for(i=0; i < list.length; i++){
-        if (list[i].id !== parseInt(req.params.id)){
-            newJson.push(list[i]);
+    function filterByID(list){
+        if (list.id !== parseInt(req.params.id)){
+            return list.id;
             };
         };
+
+    newJson = await list.filter(filterByID);
     console.log(newJson); 
  /*    deleteNoteId = req.params.id;
     console.log(deleteNoteId)
@@ -86,7 +89,7 @@ app.delete("/api/notes/:id", function(req, res){
     //console.log(id);
    //delete notes[id];
   //  console.log(notes); 
-    fs.writeFile("db.json", JSON.stringify(newJson), (err) => {
+    await fs.writeFile("db.json", JSON.stringify(newJson), (err) => {
         if (err) console.error("Something went wrong.");
         res.json(notes);
     }); 
