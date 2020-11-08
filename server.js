@@ -55,14 +55,41 @@ app.post("/api/notes", function(req, res){
 //file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
 app.delete("/api/notes/:id", function(req, res){
      
-    id = req.params.id;
+    let data = fs.readFileSync('db.json');
+    //console.log(data);
+    let list = JSON.parse(data);
+    console.log(list);
+    console.log(req.params.id);
+    console.log(list[1].id);
+     
+    
+/*      function filterByID(list){
+        if(list.id !== req.params.id){
+        return true
+        } 
+    }; */
+
+    let newJson = []; 
+    
+    for(i=0; i < list.length; i++){
+        if (list[i].id !== parseInt(req.params.id)){
+            newJson.push(list[i]);
+            };
+        };
+    console.log(newJson); 
+ /*    deleteNoteId = req.params.id;
+    console.log(deleteNoteId)
+    let data = fs.readFileSync('db.json');
+    let list = JSON.parse(data);
+    let noteToDelete = list.deleteId;
+    notes = list.filter((deleteNoteId) => {return list.id !== noteToDelete}) */
     //console.log(id);
-    notes.splice(id, 1);
-    console.log(notes); 
-    fs.writeFile("db.json", JSON.stringify(notes), (err) => {
+   //delete notes[id];
+  //  console.log(notes); 
+    fs.writeFile("db.json", JSON.stringify(newJson), (err) => {
         if (err) console.error("Something went wrong.");
         res.json(notes);
-    });  
+    }); 
 });
 
 
